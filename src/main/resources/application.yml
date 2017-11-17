@@ -8,3 +8,4 @@ security:
 logging:
     level:
         org.springframework: INFO
+        demo: DEBUG

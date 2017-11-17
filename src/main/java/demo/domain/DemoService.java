@@ -6,6 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DemoService {
 
+    private final RedisMessagePublisher redisMessagePublisher;
+
+    public DemoService(RedisMessagePublisher redisMessagePublisher) {
+        this.redisMessagePublisher = redisMessagePublisher;
+    }
+
     @Cacheable(value = "foo", key = "#q")
     public String getFoo(String q) {
         String result = q.toUpperCase();
@@ -26,6 +32,8 @@ public class DemoService {
             Thread.sleep(1000L);
         } catch (InterruptedException ignored) {
         }
+
+        redisMessagePublisher.publish("publish : " + q + " -> " + result);
 
         return result;
     }
