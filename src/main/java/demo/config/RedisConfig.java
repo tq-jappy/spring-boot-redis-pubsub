@@ -35,9 +35,9 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter messageListener() {
+    public MessageListenerAdapter messageListener(RedisMessageSubscriber redisMessageSubscriber) {
         MessageListenerAdapter messageListenerAdapter =
-                new MessageListenerAdapter(new RedisMessageSubscriber(), MessageListenerAdapter.ORIGINAL_DEFAULT_LISTENER_METHOD);
+                new MessageListenerAdapter(redisMessageSubscriber, MessageListenerAdapter.ORIGINAL_DEFAULT_LISTENER_METHOD);
         messageListenerAdapter.setSerializer(new Jackson2JsonRedisSerializer<>(EventMessage.class));
         return messageListenerAdapter;
     }
@@ -48,11 +48,12 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory) {
+    public RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory,
+                                                        MessageListenerAdapter messageListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(messageListener(), topic());
+        container.addMessageListener(messageListener, topic());
         return container;
     }
 }

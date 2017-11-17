@@ -1,11 +1,15 @@
 package demo.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DemoService {
+
+    private static final Logger log = LoggerFactory.getLogger(DemoService.class);
 
     private final CacheManager redisCacheManager;
 
@@ -48,6 +52,8 @@ public class DemoService {
     }
 
     public void clearCache() {
+        log.debug("clear cache.");
+
         redisCacheManager.getCache("foo").clear();
         caffeineCacheManager.getCache("bar").clear();
     }

@@ -9,9 +9,15 @@ public class RedisMessageSubscriber {
 
     private static final Logger log = LoggerFactory.getLogger(RedisMessageSubscriber.class);
 
+    private final DemoService demoService;
+
+    public RedisMessageSubscriber(DemoService demoService) {
+        this.demoService = demoService;
+    }
+
     public void handleMessage(EventMessage message) {
         log.debug("receive message : {}", message);
 
-        // do stuff
+        demoService.clearCache();
     }
 }
