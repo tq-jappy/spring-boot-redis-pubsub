@@ -1,0 +1,10 @@
+spring:
+    redis:
+        host: localhost
+        port: 6379
+security:
+    basic:
+        enabled: false
+logging:
+    level:
+        org.springframework: INFO
