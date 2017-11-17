@@ -1,9 +1,9 @@
 package demo.controller;
 
+import demo.domain.DemoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import demo.domain.DemoService;
 
 @RestController
 public class DemoController {
@@ -22,5 +22,11 @@ public class DemoController {
     @GetMapping("/bar")
     public String bar(@RequestParam(required = false) String q) {
         return demoService.getBar(q);
+    }
+
+    @GetMapping("/clear")
+    public String clear() {
+        demoService.clearCache();
+        return "Cleared!";
     }
 }

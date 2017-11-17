@@ -1,14 +1,23 @@
 package demo.domain;
 
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DemoService {
 
+    private final CacheManager redisCacheManager;
+
+    private final CacheManager caffeineCacheManager;
+
     private final RedisMessagePublisher redisMessagePublisher;
 
-    public DemoService(RedisMessagePublisher redisMessagePublisher) {
+    public DemoService(CacheManager redisCacheManager,
+                       CacheManager caffeineCacheManager,
+                       RedisMessagePublisher redisMessagePublisher) {
+        this.redisCacheManager = redisCacheManager;
+        this.caffeineCacheManager = caffeineCacheManager;
         this.redisMessagePublisher = redisMessagePublisher;
     }
 
@@ -36,5 +45,10 @@ public class DemoService {
         redisMessagePublisher.publish("publish : " + q + " -> " + result);
 
         return result;
+    }
+
+    public void clearCache() {
+        redisCacheManager.getCache("foo").clear();
+        caffeineCacheManager.getCache("bar").clear();
     }
 }
